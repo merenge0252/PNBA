@@ -1,3 +1,4 @@
+import Link from "next/link";
 import SetupNotice from "@/components/SetupNotice";
 import SettingsForm from "@/components/SettingsForm";
 import { lastRuns, loadSettings } from "@/lib/data";
@@ -23,6 +24,9 @@ export default async function SettingsPage() {
   return (
     <>
       <h1>設定</h1>
+      <p className="progress">
+        初期設定の進み具合は <Link href="/setup">セットアップ確認</Link> で見られます。
+      </p>
       <SettingsForm
         initial={{
           interests: settings.interests,

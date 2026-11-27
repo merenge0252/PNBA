@@ -26,39 +26,20 @@ AI を呼ぶのは1日2回です。
 
 ## はじめ方
 
-だいたい 15 分です。必要なもの: GitHub・Vercel・Google のアカウント（Neon は Vercel の中から作れます）。
+**👉 [はじめての設定（手順書）](docs/SETUP.md)** に、プログラミングを知らなくても進められる手順を1ステップずつ書いています（20分ほど）。
 
-### 1. リポジトリを自分用に作る
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmerenge0252%2FPNBA&env=PNBA_PASSWORD&envDescription=%E3%83%AD%E3%82%B0%E3%82%A4%E3%83%B3%E3%81%AE%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89%EF%BC%88%E8%87%AA%E5%88%86%E3%81%A7%E6%B1%BA%E3%82%81%E3%82%8B%EF%BC%89&project-name=pnba&repository-name=pnba)
 
-このリポジトリの **Use this template → Create a new repository** で自分のリポジトリを作ります（**Private** をおすすめします）。
+おおまかな流れ:
 
-### 2. Gemini API キーを作る
+1. 上のボタンで自分用のリポジトリと Vercel のプロジェクトを作る（ここでログインのパスワード `PNBA_PASSWORD` を決める）
+2. Vercel の **Storage** から **Neon** の DB を作ってプロジェクトに Connect し、Redeploy
+3. アプリを開いてログインし、**セットアップ確認** 画面の案内どおりに GitHub の Secrets へ `DATABASE_URL` と `GEMINI_API_KEY`（[Google AI Studio](https://aistudio.google.com/apikey) で作る）を入れる
+4. GitHub の **Actions → daily news → Run workflow** で1回目を動かす
 
-[Google AI Studio](https://aistudio.google.com/apikey) で API キーを作り、控えておきます。
+アプリの **セットアップ確認** 画面（`/setup`）に、何ができていて何が足りないか・失敗したときの直し方が出ます。
 
-### 3. Vercel に載せる
-
-1. [Vercel](https://vercel.com/new) で 1 のリポジトリを **Import** する（Framework は Next.js が自動で選ばれる。設定はそのまま）
-2. **Environment Variables** に `PNBA_PASSWORD`（ログインのパスワード。長くて推測されにくいもの）を入れて **Deploy**
-3. できたプロジェクトの **Storage → Create Database → Neon** で DB を作り、このプロジェクトに **Connect** する（`DATABASE_URL` が自動で入ります）
-4. **Deployments** から最新のものを **Redeploy** する（DB の設定を反映するため）
-
-### 4. GitHub Actions に鍵を入れる
-
-自分のリポジトリの **Settings → Secrets and variables → Actions → New repository secret** で2つ入れます。
-
-| 名前 | 値 |
-|---|---|
-| `GEMINI_API_KEY` | 2 で作った API キー |
-| `DATABASE_URL` | Vercel の **Settings → Environment Variables** にある `DATABASE_URL` の値（Neon の画面の接続文字列でも可） |
-
-### 5. 最初の1回を動かす
-
-1. Vercel の URL を開いてログインし、**設定** で「あなたの関心」と「情報源」を自分に合わせて書き換えて保存
-2. GitHub の **Actions** タブ → **daily news** → **Run workflow**（Actions が無効になっていたら有効にする）
-3. 数分たって画面を再読み込みすると記事が出ます
-
-以後は毎朝 6:17（日本時間）ごろに自動で集めます。
+ボタンを使わない場合は、このリポジトリを fork（または Template にして Use this template）してから、Vercel で Import してください。
 
 ## あると便利な設定
 
@@ -150,6 +131,7 @@ AI を呼ぶのは1日2回です。
 - 記事のリンクは http(s) 以外を開かせません
 - AI には記事の本文を「データであって指示ではない」と伝えて渡し、AI が返した URL は候補に無ければ捨てます
 - API キーやパスワードは環境変数だけに置き、DB には保存しません（Discord Webhook は設定画面で入れると DB に保存されます）
+- セットアップ確認画面は、GitHub に登録するために `DATABASE_URL` をコピーできます（ログインした本人だけ。画面上は伏せ字）
 
 ## 開発
 
@@ -175,7 +157,8 @@ TEST_DATABASE_URL=postgresql://... python -m pytest -q   # DB を使うテスト
 ### 構成
 
 ```
-app/                 Next.js の画面（App Router）と Server Actions
+app/                 Next.js の画面（App Router）と Server Actions。/setup がセットアップ確認
+docs/SETUP.md        初心者向けの手順書
 components/          画面の部品
 lib/                 DB・ログイン・設定の検査など
 proxy.ts             入口でのログイン確認

@@ -109,3 +109,23 @@ code { background: var(--chip); color: var(--chip-text); padding: 0 4px; border-
 .setup code { word-break: break-all; }
 .runbox .hint { color: var(--muted); font-size: .8rem; width: 100%; text-align: center; }
 .center { text-align: center; margin-top: -8px; }
+/* セットアップ確認 */
+.steps { list-style: none; padding: 0; margin: 0; }
+.step { display: grid; grid-template-columns: 32px 1fr; gap: 4px 10px; padding: 14px 0; border-top: 1px solid var(--line); }
+.step:first-child { border-top: 0; padding-top: 4px; }
+.step .mark { font-size: 1.2rem; line-height: 1.5; text-align: center; }
+.step h3 { margin: 0; font-size: 1rem; }
+.step .body { grid-column: 2; }
+.step .body p { margin: 6px 0; font-size: .92rem; }
+.step ol { margin: 6px 0; padding-left: 1.3em; font-size: .92rem; }
+.step ol li { margin: 4px 0; }
+.copyrow { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin: 8px 0; }
+.copyrow code { flex: 1 1 200px; word-break: break-all; padding: 6px 8px; }
+button.small { padding: 6px 12px; font-size: .85rem; }
+.linkbtn {
+  display: inline-block; border: 1px solid var(--accent); color: var(--accent); border-radius: 10px;
+  padding: 6px 12px; font-size: .85rem; text-decoration: none; margin: 4px 6px 4px 0;
+}
+.banner { border-color: var(--top); }
+.banner p { margin: 4px 0; }
+.progress { color: var(--muted); font-size: .9rem; margin: -8px 0 14px; }

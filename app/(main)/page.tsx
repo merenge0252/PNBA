@@ -2,7 +2,7 @@ import Link from "next/link";
 import ArticleCard from "@/components/ArticleCard";
 import RunButton from "@/components/RunButton";
 import SetupNotice from "@/components/SetupNotice";
-import { articleDays, articlesForDay, lastRuns } from "@/lib/data";
+import { articleDays, articlesForDay, everSucceeded, lastRuns } from "@/lib/data";
 import { SetupError } from "@/lib/db";
 import { config } from "@/lib/env";
 import { formatDay, formatTime, isDay, todayIn } from "@/lib/format";
@@ -14,9 +14,9 @@ export default async function TodayPage({ searchParams }: { searchParams: Promis
   const { day: dayParam } = await searchParams;
   const today = todayIn(config.tz);
 
-  let days, runs;
+  let days, runs, ready;
   try {
-    [days, runs] = await Promise.all([articleDays(), lastRuns(1)]);
+    [days, runs, ready] = await Promise.all([articleDays(), lastRuns(1), everSucceeded()]);
   } catch (e) {
     if (e instanceof SetupError) return <SetupNotice message={e.message} />;
     throw e;
@@ -53,6 +53,17 @@ export default async function TodayPage({ searchParams }: { searchParams: Promis
         )}
       </section>
 
+      {!ready && (
+        <div className="card banner">
+          <p>
+            <b>セットアップがまだ終わっていません。</b>
+          </p>
+          <p>
+            <Link href="/setup">セットアップ確認</Link> を開くと、次にやることが順番に出ます。
+          </p>
+        </div>
+      )}
+
       <RunButton enabled={canDispatch()} lastRunId={last?.id ?? 0} initiallyRunning={last?.status === "running"} />
       {last && (
         <p className="runstatus center">
@@ -68,8 +79,8 @@ export default async function TodayPage({ searchParams }: { searchParams: Promis
         <div className="card empty">
           <p>この日の記事はまだありません。</p>
           <p>
-            はじめての方は <Link href="/settings">設定</Link>{" "}
-            で関心と情報源を見直してから「今すぐ集める」を押してください。数分かかります。
+            はじめての方は <Link href="/setup">セットアップ確認</Link> の手順に沿って進めてください。毎朝
+            6:17（日本時間）ごろに届きます。
           </p>
         </div>
       )}

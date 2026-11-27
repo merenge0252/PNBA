@@ -1,6 +1,7 @@
 import "server-only";
 import type postgres from "postgres";
-import { db } from "./db";
+import { readFile } from "node:fs/promises";
+import { db, sharedFile } from "./db";
 import type { Settings } from "./settings-core";
 
 export type Article = {
@@ -164,4 +165,18 @@ export async function recordLoginFail(ip: string): Promise<void> {
 export async function clearLoginFails(ip: string): Promise<void> {
   const sql = await db();
   await sql`DELETE FROM pnba_login_attempts WHERE ip = ${ip}`;
+}
+
+export async function everSucceeded(): Promise<boolean> {
+  const sql = await db();
+  const [r] = await sql`SELECT 1 AS x FROM pnba_runs WHERE status IN ('ok', 'empty') LIMIT 1`;
+  return Boolean(r);
+}
+
+export async function interestsAreDefault(): Promise<boolean> {
+  const sql = await db();
+  const [r] = await sql<{ value: unknown }[]>`SELECT value FROM pnba_settings WHERE key = 'interests'`;
+  const current = String(r?.value ?? "").trim();
+  const def = (await readFile(sharedFile("defaults", "interests.md"), "utf8")).trim();
+  return current === "" || current === def;
 }
