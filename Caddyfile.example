@@ -1,0 +1,5 @@
+# news.example.com を自分のドメインに書き換える（DNS の A レコードをこのサーバーに向けておく）
+news.example.com {
+	encode gzip
+	reverse_proxy pnba:8000
+}

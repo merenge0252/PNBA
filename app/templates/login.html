@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}ログイン - PNBA{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+<form method="post" action="/login" class="card login">
+  <h1>ログイン</h1>
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+  <input type="hidden" name="csrf" value="{{ csrf }}">
+  <label>パスワード<input type="password" name="password" autocomplete="current-password" autofocus required></label>
+  <button class="primary">ログイン</button>
+</form>
+{% endblock %}

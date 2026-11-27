@@ -1,0 +1,31 @@
+{
+  "_note": "情報源の例。カテゴリ名 → about（欲しい記事の説明）と、rss / google_news / zenn_topics / github_trending_keywords",
+  "locale": {"hl": "ja", "gl": "JP"},
+  "categories": {
+    "AI": {
+      "about": "生成 AI の公式アップデート・新機能・料金の変更。入門記事・使ってみた記事は選ばない",
+      "rss": [
+        {"name": "Gemini CLI リリース", "url": "https://github.com/google-gemini/gemini-cli/releases.atom"},
+        {"name": "Claude Code リリース", "url": "https://github.com/anthropics/claude-code/releases.atom"}
+      ],
+      "google_news": ["Anthropic Claude 発表 OR 新機能", "Google Gemini 発表 OR 新機能"]
+    },
+    "テック": {
+      "about": "開発者向けの新しいツール・ライブラリ・技術の一次情報",
+      "zenn_topics": ["python", "typescript"],
+      "github_trending_keywords": ["ai", "llm", "agent"]
+    },
+    "お金・制度": {
+      "about": "税制・社会保険・クレジットカード・ポイントなど、個人の家計に効く変更",
+      "google_news": ["税制改正 OR 社会保険 変更", "クレジットカード 還元率 変更 OR 改悪"]
+    },
+    "ガジェット": {
+      "about": "スマホ・PC・イヤホンなどの新製品と大きなセール",
+      "google_news": ["新製品 スマートフォン OR ノートPC OR イヤホン 発表"]
+    },
+    "交通・旅行": {
+      "about": "新路線・ダイヤ改正・運賃の変更・空港アクセスの変更",
+      "google_news": ["ダイヤ改正 OR 新路線 OR 運賃改定"]
+    }
+  }
+}

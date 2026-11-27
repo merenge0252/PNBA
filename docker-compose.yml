@@ -1,0 +1,31 @@
+# VPS などで HTTPS 公開する例。
+#   1. .env.example を .env にコピーして GEMINI_API_KEY と PNBA_PASSWORD を入れる
+#   2. Caddyfile.example を Caddyfile にコピーしてドメインを書き換える
+#   3. docker compose up -d
+services:
+  pnba:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      PNBA_HOST: 0.0.0.0
+      PNBA_SECURE_COOKIE: "1"
+      PNBA_TRUST_PROXY: "1"
+    volumes:
+      - pnba-data:/data
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - pnba
+
+volumes:
+  pnba-data:
+  caddy-data:

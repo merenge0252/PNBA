@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="dayhead">
+  {% if prev_day %}<a class="nav-day" href="/?day={{ prev_day }}" aria-label="前の日">‹</a>{% else %}<span class="nav-day"></span>{% endif %}
+  <h1>{{ day|day }}{% if is_today %} <small>今日</small>{% endif %}</h1>
+  {% if next_day %}<a class="nav-day" href="/?day={{ next_day }}" aria-label="次の日">›</a>{% else %}<span class="nav-day"></span>{% endif %}
+</section>
+
+<div class="runbox" id="runbox">
+  <button class="secondary" id="run-now" {% if running %}disabled{% endif %}>{% if running %}実行中…{% else %}今すぐ集める{% endif %}</button>
+  <span class="runstatus" id="runstatus">
+  {% if last_run %}前回 {{ last_run.started_at[5:16].replace('T', ' ') }}
+    {% if last_run.status == 'ok' %}{{ last_run.picked }}本{% elif last_run.status == 'empty' %}新着なし{% elif last_run.status == 'error' %}<span class="error">失敗</span>{% elif last_run.status == 'running' %}実行中{% endif %}
+  {% endif %}
+  </span>
+</div>
+
+{% if not articles %}
+<div class="card empty">
+  <p>この日の記事はまだありません。</p>
+  <p>はじめての方は <a href="/settings">設定</a> で関心と情報源を見直してから「今すぐ集める」を押してください。数分かかります。</p>
+</div>
+{% endif %}
+
+{% if top %}
+<h2 class="section">まず読む</h2>
+{% for a in top %}{% include "_card.html" %}{% endfor %}
+{% endif %}
+{% if rest %}
+<h2 class="section">ほかのニュース</h2>
+{% for a in rest %}{% include "_card.html" %}{% endfor %}
+{% endif %}
+{% endblock %}
